@@ -77,6 +77,38 @@ const Index = () => {
       <section className="relative min-h-screen flex items-center justify-center px-4 py-20">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/20 via-background to-secondary/20" />
         
+        <div className="absolute top-0 left-0 w-64 h-64 opacity-40 pointer-events-none">
+          <img 
+            src="https://cdn.poehali.dev/projects/60c0cf2d-82db-486d-891b-c9e3f34b0506/files/f145b19e-f864-4bcb-9fa0-254b643616ba.jpg"
+            alt=""
+            className="w-full h-full object-contain"
+          />
+        </div>
+        
+        <div className="absolute top-0 right-0 w-64 h-64 opacity-40 pointer-events-none transform scale-x-[-1]">
+          <img 
+            src="https://cdn.poehali.dev/projects/60c0cf2d-82db-486d-891b-c9e3f34b0506/files/f145b19e-f864-4bcb-9fa0-254b643616ba.jpg"
+            alt=""
+            className="w-full h-full object-contain"
+          />
+        </div>
+        
+        <div className="absolute bottom-0 left-0 w-64 h-64 opacity-40 pointer-events-none transform scale-y-[-1]">
+          <img 
+            src="https://cdn.poehali.dev/projects/60c0cf2d-82db-486d-891b-c9e3f34b0506/files/f145b19e-f864-4bcb-9fa0-254b643616ba.jpg"
+            alt=""
+            className="w-full h-full object-contain"
+          />
+        </div>
+        
+        <div className="absolute bottom-0 right-0 w-64 h-64 opacity-40 pointer-events-none transform scale-[-1]">
+          <img 
+            src="https://cdn.poehali.dev/projects/60c0cf2d-82db-486d-891b-c9e3f34b0506/files/f145b19e-f864-4bcb-9fa0-254b643616ba.jpg"
+            alt=""
+            className="w-full h-full object-contain"
+          />
+        </div>
+        
         <div className="relative z-10 text-center max-w-4xl mx-auto animate-fade-in">
           <div className="mb-8">
             <Icon name="Sparkles" className="mx-auto text-secondary animate-float" size={48} />
