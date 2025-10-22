@@ -1,0 +1,20 @@
+{
+  "tests": [
+    {
+      "name": "Add new wish",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "guest_name": "Тестовый гость",
+        "wish_text": "Желаю счастья и любви!"
+      },
+      "expectedStatus": 201
+    },
+    {
+      "name": "Get all wishes",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200
+    }
+  ]
+}

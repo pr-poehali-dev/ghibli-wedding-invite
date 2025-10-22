@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS wishes (
+    id SERIAL PRIMARY KEY,
+    guest_name VARCHAR(255) NOT NULL,
+    wish_text TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

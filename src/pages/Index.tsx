@@ -20,6 +20,9 @@ const Index = () => {
   const [daysUntil, setDaysUntil] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
+  const [wishes, setWishes] = useState<Array<{id: number, guest_name: string, wish_text: string}>>([]);
+  const [wishForm, setWishForm] = useState({ name: '', wish: '' });
+  const [isLoadingWishes, setIsLoadingWishes] = useState(false);
 
   useEffect(() => {
     const weddingDate = new Date('2025-01-15T15:00:00');
@@ -40,6 +43,52 @@ const Index = () => {
     
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    fetchWishes();
+  }, []);
+
+  const fetchWishes = async () => {
+    try {
+      const response = await fetch('https://functions.poehali.dev/ed93ea0d-ba7e-40cc-ac45-174d6622e6c7');
+      const data = await response.json();
+      setWishes(data.wishes || []);
+    } catch (error) {
+      console.error('Error fetching wishes:', error);
+    }
+  };
+
+  const handleWishSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!wishForm.name || !wishForm.wish) return;
+    
+    setIsLoadingWishes(true);
+    try {
+      const response = await fetch('https://functions.poehali.dev/ed93ea0d-ba7e-40cc-ac45-174d6622e6c7', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ guest_name: wishForm.name, wish_text: wishForm.wish })
+      });
+      
+      if (response.ok) {
+        toast({
+          title: "Спасибо за пожелание! 💫",
+          description: "Ваши тёплые слова очень важны для нас!",
+        });
+        setWishForm({ name: '', wish: '' });
+        await fetchWishes();
+      }
+    } catch (error) {
+      console.error('Error submitting wish:', error);
+      toast({
+        title: "Ошибка",
+        description: "Не удалось отправить пожелание. Попробуйте ещё раз.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoadingWishes(false);
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -251,6 +300,79 @@ const Index = () => {
               </div>
             </CardContent>
           </Card>
+        </div>
+      </section>
+
+      <section id="wishes" className="py-20 px-4">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="font-heading text-4xl md:text-5xl text-center text-foreground mb-8 animate-fade-in">
+            Пожелания от гостей
+          </h2>
+          
+          <Card className="mb-8 animate-fade-in">
+            <CardHeader>
+              <CardTitle className="text-2xl text-center">
+                Оставьте своё пожелание
+              </CardTitle>
+              <CardDescription className="text-center text-base">
+                Ваши тёплые слова будут согревать нас всю жизнь
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleWishSubmit} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="wish-name">Ваше имя</Label>
+                  <Input
+                    id="wish-name"
+                    placeholder="Введите ваше имя"
+                    value={wishForm.name}
+                    onChange={(e) => setWishForm({ ...wishForm, name: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="wish-text">Пожелание</Label>
+                  <Textarea
+                    id="wish-text"
+                    placeholder="Напишите пожелание молодожёнам..."
+                    value={wishForm.wish}
+                    onChange={(e) => setWishForm({ ...wishForm, wish: e.target.value })}
+                    rows={4}
+                    required
+                  />
+                </div>
+                <Button type="submit" className="w-full" disabled={isLoadingWishes}>
+                  <Icon name="Heart" className="mr-2" size={20} />
+                  {isLoadingWishes ? 'Отправка...' : 'Отправить пожелание'}
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+
+          <div className="space-y-4">
+            {wishes.length === 0 ? (
+              <Card className="animate-fade-in">
+                <CardContent className="py-12 text-center">
+                  <Icon name="MessageCircle" className="mx-auto text-muted-foreground mb-4" size={48} />
+                  <p className="text-muted-foreground">Пока нет пожеланий. Будьте первым!</p>
+                </CardContent>
+              </Card>
+            ) : (
+              wishes.map((wish, index) => (
+                <Card key={wish.id} className="animate-fade-in" style={{ animationDelay: `${index * 0.05}s` }}>
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center gap-2">
+                      <Icon name="User" className="text-secondary" size={20} />
+                      <CardTitle className="text-lg">{wish.guest_name}</CardTitle>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground italic">"{wish.wish_text}"</p>
+                  </CardContent>
+                </Card>
+              ))
+            )}
+          </div>
         </div>
       </section>
 
