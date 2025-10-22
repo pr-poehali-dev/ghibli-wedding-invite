@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -17,6 +17,29 @@ const Index = () => {
     guests: '1',
     message: ''
   });
+  const [daysUntil, setDaysUntil] = useState(0);
+  const [hours, setHours] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+
+  useEffect(() => {
+    const weddingDate = new Date('2025-01-15T15:00:00');
+    
+    const updateCountdown = () => {
+      const now = new Date();
+      const difference = weddingDate.getTime() - now.getTime();
+      
+      if (difference > 0) {
+        setDaysUntil(Math.floor(difference / (1000 * 60 * 60 * 24)));
+        setHours(Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+        setMinutes(Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)));
+      }
+    };
+
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 60000);
+    
+    return () => clearInterval(interval);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,11 +100,50 @@ const Index = () => {
             </p>
           </div>
 
-          <img 
-            src="https://v3b.fal.media/files/b/rabbit/wjpVIpoooQ2Xu7by27hiF_output.png"
-            alt="Зимний лес в стиле Гибли"
-            className="rounded-2xl shadow-2xl max-w-2xl w-full mx-auto"
-          />
+          <div className="bg-secondary/20 backdrop-blur-sm rounded-2xl p-8 mb-8 max-w-xl mx-auto">
+            <p className="text-lg text-muted-foreground mb-4">До волшебного дня осталось:</p>
+            <div className="flex justify-center gap-6">
+              <div className="text-center">
+                <div className="text-4xl md:text-5xl font-heading text-secondary">{daysUntil}</div>
+                <div className="text-sm text-muted-foreground mt-2">дней</div>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl md:text-5xl font-heading text-secondary">{hours}</div>
+                <div className="text-sm text-muted-foreground mt-2">часов</div>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl md:text-5xl font-heading text-secondary">{minutes}</div>
+                <div className="text-sm text-muted-foreground mt-2">минут</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 max-w-3xl mx-auto">
+            <div className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              <img 
+                src="https://cdn.poehali.dev/projects/60c0cf2d-82db-486d-891b-c9e3f34b0506/files/2539b7d3-271b-4e10-9abd-d897cbdd4f37.jpg"
+                alt="Невеста в стиле Гибли"
+                className="rounded-2xl shadow-xl w-full h-80 object-cover"
+              />
+              <p className="text-center mt-4 text-xl text-foreground font-semibold">Анна</p>
+            </div>
+            <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
+              <img 
+                src="https://cdn.poehali.dev/projects/60c0cf2d-82db-486d-891b-c9e3f34b0506/files/c7c41674-1785-4465-88ed-67a29909c338.jpg"
+                alt="Жених в стиле Гибли"
+                className="rounded-2xl shadow-xl w-full h-80 object-cover"
+              />
+              <p className="text-center mt-4 text-xl text-foreground font-semibold">Михаил</p>
+            </div>
+          </div>
+
+          <div className="animate-fade-in" style={{ animationDelay: '0.6s' }}>
+            <img 
+              src="https://cdn.poehali.dev/projects/60c0cf2d-82db-486d-891b-c9e3f34b0506/files/c83706d5-442f-4e19-a234-2b9c0cceca03.jpg"
+              alt="Жених и невеста в стиле Гибли"
+              className="rounded-2xl shadow-2xl max-w-2xl w-full mx-auto"
+            />
+          </div>
         </div>
       </section>
 
